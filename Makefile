@@ -1,8 +1,8 @@
-.PHONY: 'start stop build clean setup'
+.PHONY: 'start stop build clean'
 
-start:
+start: build
 	@echo 'Starting containers...'
-	@docker-compose up
+	@COMPOSE_PROJECT_NAME=plantei docker-compose up
 
 stop:
 	@echo 'Stopping containers...'
@@ -14,10 +14,12 @@ build:
 
 clean:
 	@echo 'Removing the docker images...'
-	@docker container rm plantei-database 2>/dev/null || echo 'Error while removing plantei-database container'
-	@docker container rm plantei-backend 2>/dev/null || echo 'Error while removing plantei-backend container'
-	@docker image rm plantei-database:1.0 2>/dev/null || echo 'Error while removing plantei-database image'
-	@docker image rm plantei-backend:1.0 2>/dev/null || echo 'Error while removing plantei-backend image'
-
-setup:
-	@echo 'Not yet'
+	@docker container rm plantei-frontend || echo 'Error while removing plantei-frontend container'
+	@docker container rm plantei-database || echo 'Error while removing plantei-database container'
+	@docker container rm plantei-backend || echo 'Error while removing plantei-backend container'
+	@docker image rm plantei-frontend:1.0 || echo 'Error while removing plantei-frontend image'
+	@docker image rm plantei-database:1.0 || echo 'Error while removing plantei-database image'
+	@docker image rm plantei-backend:1.0 || echo 'Error while removing plantei-backend image'
+	@docker network rm plantei-backend || echo 'Error while removing plantei-backend network'
+	@docker network rm plantei-frontend || echo 'Error while removing plantei-frontend network'
+	@docker volume rm plantei-db || echo 'Error while removing plantei-db volume'

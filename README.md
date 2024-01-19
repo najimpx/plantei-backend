@@ -18,33 +18,28 @@ utilizando suas plantações. Dessa forma, o aplicativo incentiva o usuário a t
 Subir a aplicação:
 
 ```sh
-docker-compose up -d
+docker-compose --profile deploy up -d
 ```
 
 Derrubar a aplicação:
 
 ```sh
-docker-compose down
+docker-compose --profile deploy down
 ```
 
-## Build da aplicação
+## Build da aplicação local
+
+Não precisa executar os passos seguintes caso opte por usar o Docker.
 
 ### 1. Criar o banco de dados no Postgresql
 
 - Requisitos: instalar o **Postgresql**.
-
-**1.1. Usuarios Linux**
-
-- Rode o script `configDBLinuxUsers`
-
-**1.2. Usuarios Windows**
-
 - Abra o shell do Postgresql (psql)
 - Execute em sequencia:
-    - `CREATE USER planteiAdmin WITH ENCRYPTED PASSWORD 'planteiAdmin';`
-    - `CREATE DATABASE plantei WITH OWNER = planteiAdmin ENCODING = 'UTF8' TABLESPACE = pg_default CONNECTION LIMIT = -1;`
-    - `GRANT ALL PRIVILEGES ON DATABASE plantei TO planteiAdmin;`
-    
+  - `CREATE USER planteiadmin WITH ENCRYPTED PASSWORD 'planteiAdmin';`
+  - `CREATE DATABASE plantei WITH OWNER = planteiAdmin ENCODING = 'UTF8' TABLESPACE = pg_default CONNECTION LIMIT = -1;`
+  - `GRANT ALL PRIVILEGES ON DATABASE plantei TO planteiadmin;`
+
   ![image](https://user-images.githubusercontent.com/67126558/190192112-0a13c2c3-1277-49d5-893c-f8a32ec7ac8e.png)
 
 
@@ -52,44 +47,25 @@ docker-compose down
 
 - Requisitos: instalar o [Maven](https://maven.apache.org/download.cgi).
 
-- Rode o comando `mvn clean install` em seu terminal dentro do diretório do projeto. Ele irá executar o
+- Rode o comando `mvn clean install` em seu terminal dentro do diretório `plantei-backend` do projeto. Ele irá executar o
   arquivo `pom.xml`.
 
 ### 3. Subir a aplicação localmente
 
-Executar os seguintes comandos em sequencia:
+Executar os seguintes comandos em sequencia dentro do diretório `plantei-backend/src/main/java/com/plantei/planteibackend` do projeto:
 
 - `javac PlanteiBackendApplication.java`
 
 - `java PlanteiBackendApplication`
 
-A aplicação estará rodando em [http://localhost:8080](http://localhost:8080/).
+
+## Aplicação rodando localmente
+A aplicação front estará rodando em [http://localhost:80](http://localhost:80/).
+
+O back-end estará rodando em [http://localhost:8080](http://localhost:8080/).
 
 ## Ferramentas de desenvolvimento
 
 - Java: [Intellij](https://www.jetbrains.com/pt-br/idea/)
 - Banco de dados (postgresql): [BeeKeeper Studio](https://www.beekeeperstudio.io/)
 - Testar requisições: [Postman](https://www.postman.com/)
-
-## End-points
-
-### Dados do usuário
-
-- [GET] `/api/usuario/listar` => ira fornecer uma lista (JSON) contendo os dados de todos os usuarios existentes no
-  banco de dados.
-- [GET] `/api/usuario/{id}` => ira fornecer os dados (JSON) do usuario com o ID fornecido no path da requisicao.
-- [POST] `/api/usuario/add` => ira adicionar um usuario novo, cujos dados sao enviados no body da requisicao.
-- [PUT] `/api/usuario/alterarDados/{id}` => altera os dados de um usuario, cujo ID é aquele fornecido no path da
-  requisicao.
-- [DELETE] `/api/usuario/remover/{id}` => remove do banco o usuario cujo ID é fornecido no path da requisição.
-
-### Dados da planta
-
-- [GET] `/api/planta/listar` => ira fornecer uma lista (JSON) contendo os dados de todas as plantas existentes no banco
-  de dados.
-- [GET] `/api/planta/{id}` => ira fornecer os dados (JSON) da planta com o ID fornecido no path da requisicao.
-- [POST] `/api/planta/add` => ira adicionar uma planta nova, cujos dados sao enviados no body da requisicao.
-- [PUT] `/api/planta/alterarDados/{id}` => altera os dados de uma planta, cujo ID é aquele fornecido no path da
-  requisicao.
-- [DELETE] `/api/planta/remover/{id}` => remove do banco a planta cujo ID é fornecido no path da requisição.
-
